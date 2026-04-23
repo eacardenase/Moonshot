@@ -9,9 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     let layout = [
-        GridItem(.fixed(100)),
-        GridItem(.fixed(100)),
-        GridItem(.fixed(100)),
+        GridItem(.adaptive(minimum: 80, maximum: 120))
     ]
 
     var body: some View {
@@ -20,7 +18,10 @@ struct ContentView: View {
                 ForEach(0..<1000) {
                     Text("Item \($0)")
                         .frame(width: 80, height: 80)
-                        .background(.red)
+                        .background(.red.gradient)
+                        .foregroundStyle(.white)
+                        .font(.headline)
+                        .clipShape(.rect(cornerRadius: 8))
                 }
             }
         }

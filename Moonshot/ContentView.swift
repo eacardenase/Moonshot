@@ -7,31 +7,33 @@
 
 import SwiftUI
 
-struct CustomText: View {
-    let text: String
-
-    var body: some View {
-        Text(text)
-    }
-
-    init(_ text: String) {
-        print("Creating a new CustomText with text '\(text)'")
-
-        self.text = text
-    }
-}
-
 struct ContentView: View {
+    @State private var showingSheet = false
+
     var body: some View {
-        ScrollView(.horizontal) {
-            LazyHStack(spacing: 10) {
-                ForEach(0..<100) {
-                    CustomText("Item \($0 + 1)")
-                        .font(.title)
+        NavigationStack {
+            NavigationLink("Tap Me") {
+                NavigationStack {
+                    List {
+                        ForEach(0..<10) {
+                            Text("Item \($0)")
+                        }
+                    }
+                    .navigationTitle("Detail View")
+                    .toolbar {
+                        ToolbarItem {
+                            Button("Add", systemImage: "plus", role: .confirm) {
+                                showingSheet = true
+                            }
+                        }
+                    }
+                    .sheet(isPresented: $showingSheet) {
+                        Text("Sheet")
+                    }
                 }
             }
+            .navigationTitle("SwiftUI")
         }
-        .scrollIndicators(.never)
     }
 }
 

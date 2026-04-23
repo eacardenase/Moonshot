@@ -15,7 +15,7 @@ struct CustomText: View {
     }
 
     init(_ text: String) {
-        print("Creating a new CustomText")
+        print("Creating a new CustomText with text '\(text)'")
 
         self.text = text
     }
@@ -24,13 +24,12 @@ struct CustomText: View {
 struct ContentView: View {
     var body: some View {
         ScrollView {
-            VStack(spacing: 10) {
+            LazyVStack(spacing: 10) {
                 ForEach(0..<100) {
                     CustomText("Item \($0 + 1)")
                         .font(.title)
                 }
             }
-            .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.never)
     }

@@ -41,7 +41,7 @@ struct ContentView: View {
                                         .font(.caption)
                                         .foregroundStyle(.white.opacity(0.6))
                                 }
-                                .padding(.vertical)
+                                .padding(.bottom)
                                 .frame(maxWidth: .infinity)
                             }
                             .background(

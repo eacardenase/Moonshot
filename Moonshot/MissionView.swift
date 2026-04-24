@@ -37,25 +37,36 @@ struct MissionView: View {
                     }
 
                 VStack(alignment: .leading, spacing: 8) {
+                    Rectangle()
+                        .frame(height: 2)
+                        .padding(.vertical)
+
                     Text("Mission Highlights")
                         .font(.title.bold())
 
                     Text(mission.description)
+
+                    Rectangle()
+                        .frame(height: 2)
+                        .padding(.vertical)
+
+                    Text("Crew")
+                        .font(.title2.bold())
                 }
 
                 ScrollView(.horizontal) {
-                    HStack {
+                    HStack(spacing: 32) {
                         ForEach(crew, id: \.role) { crewMember in
                             NavigationLink {
                                 Text("Astronaut Details")
                             } label: {
-                                HStack {
+                                HStack(spacing: 16) {
                                     Image(crewMember.astronaut.id)
                                         .resizable()
                                         .frame(width: 104, height: 72)
-                                        .clipShape(.capsule)
+                                        .clipShape(.rect(cornerRadius: 10))
                                         .overlay {
-                                            Capsule()
+                                            RoundedRectangle(cornerRadius: 10, )
                                                 .stroke(.white, lineWidth: 1)
                                         }
 
@@ -70,7 +81,6 @@ struct MissionView: View {
                                             )
                                     }
                                 }
-                                .padding(.horizontal)
                             }
                         }
                     }

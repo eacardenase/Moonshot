@@ -55,8 +55,30 @@ struct ContentView: View {
                                 }
                                 .padding(.vertical)
                                 .frame(maxWidth: .infinity)
-                                .background(.lightBackground)
                             }
+                            .background(
+                                LinearGradient(
+                                    stops: [
+                                        Gradient.Stop(
+                                            color: .white,
+                                            location: 0
+                                        ),
+                                        Gradient.Stop(
+                                            color: .darkBackground.mix(
+                                                with: .white,
+                                                by: 0.5
+                                            ),
+                                            location: 0.38
+                                        ),
+                                        Gradient.Stop(
+                                            color: .darkBackground,
+                                            location: 0.9
+                                        ),
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottom
+                                )
+                            )
                             .clipShape(.rect(cornerRadius: 10))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 10)

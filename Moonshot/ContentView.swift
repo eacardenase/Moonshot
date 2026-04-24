@@ -7,21 +7,6 @@
 
 import SwiftUI
 
-struct MissionView: View {
-    let mission: Mission
-
-    var body: some View {
-        NavigationStack {
-            VStack {
-                ForEach(mission.crew, id: \.name) { crewMember in
-                    Text(crewMember.name)
-                }
-            }
-            .navigationTitle(mission.displayName)
-        }
-    }
-}
-
 struct ContentView: View {
     let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
     let missions: [Mission] = Bundle.main.decode("missions.json")
@@ -51,7 +36,7 @@ struct ContentView: View {
 
                                     Text(mission.formattedLaunchDate)
                                         .font(.caption)
-                                        .foregroundStyle(.white.opacity(0.5))
+                                        .foregroundStyle(.white.opacity(0.6))
                                 }
                                 .padding(.vertical)
                                 .frame(maxWidth: .infinity)
@@ -60,19 +45,15 @@ struct ContentView: View {
                                 LinearGradient(
                                     stops: [
                                         Gradient.Stop(
-                                            color: .white,
-                                            location: 0
-                                        ),
-                                        Gradient.Stop(
                                             color: .darkBackground.mix(
                                                 with: .white,
                                                 by: 0.5
                                             ),
-                                            location: 0.38
+                                            location: 0
                                         ),
                                         Gradient.Stop(
                                             color: .darkBackground,
-                                            location: 0.9
+                                            location: 1
                                         ),
                                     ],
                                     startPoint: .topLeading,

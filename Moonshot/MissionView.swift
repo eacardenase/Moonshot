@@ -9,6 +9,15 @@ import SwiftUI
 
 struct MissionView: View {
     let mission: Mission
+    let astronautsData: [String: Astronaut] = Bundle.main.decode(
+        "astronauts.json"
+    )
+
+    var astronautsList: [Astronaut] {
+        mission.crew.compactMap { crewMember in
+            astronautsData[crewMember.name]
+        }
+    }
 
     var body: some View {
         ScrollView {
@@ -25,6 +34,18 @@ struct MissionView: View {
                         .font(.title.bold())
 
                     Text(mission.description)
+                }
+
+                Text("Crew")
+                    .font(.title2.bold())
+
+                ForEach(astronautsList) { astronaut in
+                    NavigationLink {
+                        Text("Astronaut Details View")
+                    } label: {
+                        Text(astronaut.name)
+                            .font(.headline)
+                    }
                 }
             }
             .frame(maxWidth: .infinity)

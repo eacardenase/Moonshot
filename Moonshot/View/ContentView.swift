@@ -7,75 +7,142 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
-    let missions: [Mission] = Bundle.main.decode("missions.json")
+struct GradientBackground: View {
+    var body: some View {
+        LinearGradient(
+            stops: [
+                Gradient.Stop(
+                    color: .darkBackground.mix(
+                        with: .white,
+                        by: 0.3
+                    ),
+                    location: 0
+                ),
+                Gradient.Stop(
+                    color: .darkBackground,
+                    location: 1
+                ),
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottom
+        )
+    }
+}
+
+struct GridLayout: View {
+    let astronauts: [String: Astronaut]
+    let missions: [Mission]
     let layout = [
         GridItem(.adaptive(minimum: 150))
     ]
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                LazyVGrid(columns: layout, spacing: 16) {
-                    ForEach(missions) { mission in
-                        NavigationLink {
-                            MissionView(
-                                mission: mission,
-                                astronauts: astronauts
-                            )
-                        } label: {
+        ScrollView {
+            LazyVGrid(columns: layout, spacing: 16) {
+                ForEach(missions) { mission in
+                    NavigationLink {
+                        MissionView(
+                            mission: mission,
+                            astronauts: astronauts
+                        )
+                    } label: {
+                        VStack {
+                            Image(mission.imageName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100, height: 100)
+                                .padding()
+
                             VStack {
-                                Image(mission.imageName)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 100, height: 100)
-                                    .padding()
+                                Text(mission.displayName)
+                                    .font(.headline)
+                                    .foregroundStyle(.white)
 
-                                VStack {
-                                    Text(mission.displayName)
-                                        .font(.headline)
-                                        .foregroundStyle(.white)
-
-                                    Text(mission.formattedLaunchDate)
-                                        .font(.caption)
-                                        .foregroundStyle(.white.opacity(0.6))
-                                }
-                                .padding(.bottom)
-                                .frame(maxWidth: .infinity)
+                                Text(mission.formattedLaunchDate)
+                                    .font(.caption)
+                                    .foregroundStyle(.white.opacity(0.6))
                             }
-                            .background(
-                                LinearGradient(
-                                    stops: [
-                                        Gradient.Stop(
-                                            color: .darkBackground.mix(
-                                                with: .white,
-                                                by: 0.5
-                                            ),
-                                            location: 0
-                                        ),
-                                        Gradient.Stop(
-                                            color: .darkBackground,
-                                            location: 1
-                                        ),
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottom
-                                )
-                            )
-                            .clipShape(.rect(cornerRadius: 10))
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.lightBackground)
-                            }
+                            .padding(.bottom)
+                            .frame(maxWidth: .infinity)
+                        }
+                        .background(GradientBackground())
+                        .clipShape(.rect(cornerRadius: 10))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.lightBackground)
                         }
                     }
                 }
-                .padding([.horizontal, .bottom])
+            }
+            .padding([.horizontal, .bottom])
+        }
+
+    }
+}
+
+struct ListLayout: View {
+    let astronauts: [String: Astronaut]
+    let missions: [Mission]
+
+    var body: some View {
+        List(missions) { mission in
+            NavigationLink {
+                MissionView(
+                    mission: mission,
+                    astronauts: astronauts
+                )
+            } label: {
+                HStack(spacing: 32) {
+                    Image(mission.imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100)
+
+                    VStack(alignment: .leading) {
+                        Text(mission.displayName)
+                            .font(.headline)
+                            .foregroundStyle(.white)
+
+                        Text(mission.formattedLaunchDate)
+                            .font(.subheadline)
+                            .foregroundStyle(.white.opacity(0.6))
+                    }
+                }
+            }
+            .listRowBackground(GradientBackground())
+        }
+        .listStyle(.plain)
+    }
+}
+
+struct ContentView: View {
+    @State private var showingGrid = true
+    let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
+    let missions: [Mission] = Bundle.main.decode("missions.json")
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if showingGrid {
+                    GridLayout(astronauts: astronauts, missions: missions)
+                } else {
+                    ListLayout(astronauts: astronauts, missions: missions)
+                }
             }
             .navigationTitle("Moonshot")
-            .background(.darkBackground)
+            .background(.darkBackground.gradient)
             .preferredColorScheme(.dark)
+            .scrollIndicators(.never)
+            .toolbar {
+                ToolbarItem {
+                    Toggle(
+                        showingGrid ? "List" : "Grid",
+                        isOn: $showingGrid
+                    )
+                    .tint(.darkBackground)
+                    .foregroundStyle(.white)
+                }
+            }
         }
     }
 }

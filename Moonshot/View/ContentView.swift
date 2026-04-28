@@ -135,10 +135,11 @@ struct ContentView: View {
             .scrollIndicators(.never)
             .toolbar {
                 ToolbarItem {
-                    Toggle(
-                        showingGrid ? "List" : "Grid",
-                        isOn: $showingGrid
-                    )
+                    Toggle(isOn: $showingGrid) {
+                        showingGrid
+                            ? Image(systemName: "list.bullet")
+                            : Image(systemName: "square.grid.2x2")
+                    }
                     .tint(.darkBackground)
                     .foregroundStyle(.white)
                 }
